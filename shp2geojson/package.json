@@ -20,6 +20,8 @@
     "shp2geojson": "./bin/shp2geojson"
   },
   "scripts": {
+    "shp2geojson": "node bin/shp2geojson",
+    "convert": "node bin/shp2geojson",
     "test": "node bin/shp2geojson --help"
   },
   "dependencies": {
