@@ -1,6 +1,6 @@
 # shp2geojson
 
-A simple command-line tool to convert Shapefile (.shp) to GeoJSON format.
+A simple command-line tool to convert Shapefile (.shp) or ZIP archives containing Shapefiles to GeoJSON format.
 
 This is a subproject of [mapshaper](https://github.com/mbloch/mapshaper), providing a streamlined CLI interface specifically for Shapefile to GeoJSON conversion.
 
@@ -10,6 +10,13 @@ This is a subproject of [mapshaper](https://github.com/mbloch/mapshaper), provid
 cd shp2geojson
 npm install
 ```
+
+## Supported Input Formats
+
+| Format | Description |
+|--------|-------------|
+| `.shp` | Shapefile (requires `.dbf` and `.shx` in same directory) |
+| `.zip` | ZIP archive containing complete Shapefile components |
 
 ## Usage
 
@@ -22,18 +29,28 @@ node bin/shp2geojson input.shp
 # Output: input.geojson
 ```
 
-### Batch Conversion
+### Convert from ZIP Archive
 
-Convert multiple Shapefiles at once:
+Convert a ZIP file containing Shapefile components:
 
 ```bash
-node bin/shp2geojson file1.shp file2.shp file3.shp
+node bin/shp2geojson data.zip
+# Output: data.geojson
+```
+
+### Batch Conversion
+
+Convert multiple files at once:
+
+```bash
+node bin/shp2geojson file1.shp file2.zip file3.shp
 ```
 
 Or use wildcards:
 
 ```bash
 node bin/shp2geojson *.shp
+node bin/shp2geojson *.zip
 ```
 
 ### Pretty Print Output
@@ -42,6 +59,7 @@ Format the output JSON for better readability:
 
 ```bash
 node bin/shp2geojson input.shp --prettify
+node bin/shp2geojson input.zip --prettify
 ```
 
 ### Help
@@ -63,14 +81,20 @@ node bin/shp2geojson --help
 ## Examples
 
 ```bash
-# Convert a single file
+# Convert a single .shp file
 node bin/shp2geojson data/counties.shp
+
+# Convert a ZIP archive
+node bin/shp2geojson data/counties.zip
 
 # Convert with pretty formatting
 node bin/shp2geojson data/counties.shp --prettify
 
 # Batch convert all shapefiles in a directory
 node bin/shp2geojson data/*.shp
+
+# Batch convert all ZIP files
+node bin/shp2geojson data/*.zip
 ```
 
 ## Requirements
@@ -80,7 +104,8 @@ node bin/shp2geojson data/*.shp
 
 ## Notes
 
-- The tool expects the associated `.dbf` and `.shx` files to be in the same directory as the `.shp` file
+- For `.shp` files: the tool expects the associated `.dbf` and `.shx` files to be in the same directory
+- For `.zip` files: the archive should contain complete Shapefile components (`.shp`, `.dbf`, `.shx`, and optionally `.prj`, `.cpg`)
 - Output files are saved in the same directory as the input files
 - Existing output files will be overwritten
 

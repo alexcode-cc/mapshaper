@@ -2,6 +2,9 @@ import mapshaper from 'mapshaper';
 import path from 'path';
 import fs from 'fs';
 
+// Supported input file extensions
+const SUPPORTED_EXTENSIONS = ['.shp', '.zip'];
+
 /**
  * Convert Shapefile(s) to GeoJSON format
  * @param {string[]} files - Array of input file paths
@@ -19,8 +22,8 @@ export async function convert(files, options = {}) {
 }
 
 /**
- * Convert a single Shapefile to GeoJSON
- * @param {string} inputFile - Input .shp file path
+ * Convert a single Shapefile or ZIP to GeoJSON
+ * @param {string} inputFile - Input .shp or .zip file path
  * @param {Object} options - Conversion options
  */
 async function convertFile(inputFile, options = {}) {
@@ -34,14 +37,14 @@ async function convertFile(inputFile, options = {}) {
     throw new Error(`Input file not found: ${inputFile}`);
   }
 
-  // Check if it's a .shp file
+  // Check if it's a supported file type
   const ext = path.extname(absoluteInput).toLowerCase();
-  if (ext !== '.shp') {
-    throw new Error(`Input file must be a .shp file: ${inputFile}`);
+  if (!SUPPORTED_EXTENSIONS.includes(ext)) {
+    throw new Error(`Input file must be a .shp or .zip file: ${inputFile}`);
   }
 
   // Generate output filename (same name with .geojson extension)
-  const outputFile = absoluteInput.replace(/\.shp$/i, '.geojson');
+  const outputFile = absoluteInput.replace(/\.(shp|zip)$/i, '.geojson');
 
   // Build mapshaper command
   const commands = [

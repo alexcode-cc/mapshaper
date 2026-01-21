@@ -9,8 +9,12 @@ if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
 shp2geojson - Convert Shapefile to GeoJSON
 
 Usage:
-  shp2geojson <input.shp> [output.geojson]
-  shp2geojson <input1.shp> <input2.shp> ...
+  shp2geojson <input.shp|input.zip>
+  shp2geojson <file1> <file2> ...
+
+Supported Input Formats:
+  .shp   Shapefile (requires .dbf and .shx in same directory)
+  .zip   ZIP archive containing Shapefile components
 
 Options:
   -h, --help     Show this help message
@@ -19,8 +23,9 @@ Options:
 
 Examples:
   shp2geojson data.shp                    # Output: data.geojson
-  shp2geojson data.shp output.geojson     # Output: output.geojson
+  shp2geojson data.zip                    # Output: data.geojson (from ZIP)
   shp2geojson *.shp                       # Convert all shp files
+  shp2geojson *.zip                       # Convert all zip files
   shp2geojson data.shp --prettify         # Pretty formatted output
 `);
   process.exit(0);

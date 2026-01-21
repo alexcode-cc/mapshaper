@@ -72,12 +72,19 @@ export async function convert(files, options = {}) {
 
 轉換單一檔案的內部函式。
 
+**支援的輸入格式：**
+
+| 格式 | 說明 |
+|------|------|
+| `.shp` | Shapefile（需要同目錄下的 `.dbf` 和 `.shx`） |
+| `.zip` | 包含完整 Shapefile 組件的 ZIP 壓縮檔 |
+
 **處理流程：**
 
 1. 解析絕對路徑
 2. 檢查檔案是否存在
-3. 驗證副檔名為 `.shp`
-4. 產生輸出檔名（`.shp` → `.geojson`）
+3. 驗證副檔名為 `.shp` 或 `.zip`
+4. 產生輸出檔名（`.shp`/`.zip` → `.geojson`）
 5. 建構 mapshaper 命令
 6. 執行轉換並回傳 Promise
 
@@ -114,7 +121,11 @@ mapshaper.runCommands(commands, callback);
 轉換命令對應的 mapshaper CLI：
 
 ```bash
+# 從 .shp 檔案轉換
 mapshaper -i input.shp -o output.geojson format=geojson [prettify]
+
+# 從 .zip 檔案轉換
+mapshaper -i input.zip -o output.geojson format=geojson [prettify]
 ```
 
 程式碼實作：
@@ -128,6 +139,42 @@ const commands = [
 if (prettify) {
   commands.push('prettify');
 }
+```
+
+### ZIP 檔案處理
+
+mapshaper 內建支援 ZIP 檔案的處理，相關模組：
+
+| 檔案路徑 | 說明 |
+|----------|------|
+| `src/io/mapshaper-zip.mjs` | ZIP 解壓縮功能 |
+| `src/io/mapshaper-file-import.mjs` | 檔案導入（含 ZIP 展開） |
+
+**ZIP 處理流程：**
+
+```
+輸入 .zip 檔案
+    ↓
+expandZipFile() 解壓縮
+    ↓
+unzipSync() 取得檔案內容
+    ↓
+findPrimaryFiles() 找出主要檔案 (.shp)
+    ↓
+importFile() 匯入 Shapefile
+    ↓
+exportGeoJSON() 轉換輸出
+```
+
+**ZIP 檔案結構要求：**
+
+```
+data.zip
+├── layer.shp      # 必要：幾何資料
+├── layer.dbf      # 必要：屬性資料
+├── layer.shx      # 必要：空間索引
+├── layer.prj      # 選用：座標系統
+└── layer.cpg      # 選用：字元編碼
 ```
 
 ## Shapefile 轉換原理
@@ -256,7 +303,7 @@ const commands = [
 ### 手動測試
 
 ```bash
-# 基本轉換
+# 基本轉換 (.shp)
 node bin/shp2geojson ../test/data/three_points.shp
 
 # 美化輸出
@@ -264,6 +311,9 @@ node bin/shp2geojson ../test/data/two_states.shp --prettify
 
 # 批量轉換
 node bin/shp2geojson ../test/data/*.shp
+
+# ZIP 檔案轉換（需自行準備測試檔案）
+node bin/shp2geojson test_data.zip
 ```
 
 ### 測試資料位置
@@ -312,6 +362,7 @@ var api = {
 
 ## 未來可能的改進方向
 
+- [x] 支援 ZIP 檔案輸入
 - [ ] 支援指定輸出目錄
 - [ ] 支援指定輸出檔名
 - [ ] 新增 `--silent` 靜音模式
