@@ -10,14 +10,15 @@ const SUPPORTED_EXTENSIONS = ['.shp', '.zip'];
  * @param {string[]} files - Array of input file paths
  * @param {Object} options - Conversion options
  * @param {boolean} options.prettify - Format output JSON for readability
+ * @param {boolean} options.json - Use .json extension instead of .geojson
  */
 export async function convert(files, options = {}) {
-  const { prettify = false } = options;
+  const { prettify = false, json = false } = options;
 
   mapshaper.enableLogging();
 
   for (const inputFile of files) {
-    await convertFile(inputFile, { prettify });
+    await convertFile(inputFile, { prettify, json });
   }
 }
 
@@ -27,7 +28,7 @@ export async function convert(files, options = {}) {
  * @param {Object} options - Conversion options
  */
 async function convertFile(inputFile, options = {}) {
-  const { prettify = false } = options;
+  const { prettify = false, json = false } = options;
 
   // Resolve absolute path
   const absoluteInput = path.resolve(inputFile);
@@ -43,8 +44,9 @@ async function convertFile(inputFile, options = {}) {
     throw new Error(`Input file must be a .shp or .zip file: ${inputFile}`);
   }
 
-  // Generate output filename (same name with .geojson extension)
-  const outputFile = absoluteInput.replace(/\.(shp|zip)$/i, '.geojson');
+  // Generate output filename (use .json or .geojson based on option)
+  const outputExt = json ? '.json' : '.geojson';
+  const outputFile = absoluteInput.replace(/\.(shp|zip)$/i, outputExt);
 
   // Build mapshaper command
   const commands = [

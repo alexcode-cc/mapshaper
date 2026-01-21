@@ -20,6 +20,7 @@ Options:
   -h, --help     Show this help message
   -v, --version  Show version number
   --prettify     Format output JSON for readability
+  --json         Use .json extension instead of .geojson
 
 Examples:
   shp2geojson data.shp                    # Output: data.geojson
@@ -27,6 +28,7 @@ Examples:
   shp2geojson *.shp                       # Convert all shp files
   shp2geojson *.zip                       # Convert all zip files
   shp2geojson data.shp --prettify         # Pretty formatted output
+  shp2geojson data.shp --json             # Output: data.json
 `);
   process.exit(0);
 }
@@ -38,6 +40,7 @@ if (args.includes('--version') || args.includes('-v')) {
 }
 
 const prettify = args.includes('--prettify');
+const json = args.includes('--json');
 const files = args.filter(arg => !arg.startsWith('-'));
 
 if (files.length === 0) {
@@ -46,7 +49,7 @@ if (files.length === 0) {
 }
 
 try {
-  await convert(files, { prettify });
+  await convert(files, { prettify, json });
 } catch (err) {
   console.error('Error:', err.message);
   process.exit(1);
