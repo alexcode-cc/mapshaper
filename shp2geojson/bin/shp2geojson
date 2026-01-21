@@ -1,0 +1,48 @@
+#!/usr/bin/env node
+
+import { convert } from '../src/index.mjs';
+
+const args = process.argv.slice(2);
+
+if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
+  console.log(`
+shp2geojson - Convert Shapefile to GeoJSON
+
+Usage:
+  shp2geojson <input.shp> [output.geojson]
+  shp2geojson <input1.shp> <input2.shp> ...
+
+Options:
+  -h, --help     Show this help message
+  -v, --version  Show version number
+  --prettify     Format output JSON for readability
+
+Examples:
+  shp2geojson data.shp                    # Output: data.geojson
+  shp2geojson data.shp output.geojson     # Output: output.geojson
+  shp2geojson *.shp                       # Convert all shp files
+  shp2geojson data.shp --prettify         # Pretty formatted output
+`);
+  process.exit(0);
+}
+
+if (args.includes('--version') || args.includes('-v')) {
+  const pkg = await import('../package.json', { with: { type: 'json' } });
+  console.log(pkg.default.version);
+  process.exit(0);
+}
+
+const prettify = args.includes('--prettify');
+const files = args.filter(arg => !arg.startsWith('-'));
+
+if (files.length === 0) {
+  console.error('Error: No input file specified');
+  process.exit(1);
+}
+
+try {
+  await convert(files, { prettify });
+} catch (err) {
+  console.error('Error:', err.message);
+  process.exit(1);
+}

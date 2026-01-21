@@ -1,0 +1,28 @@
+{
+  "name": "shp2geojson",
+  "version": "1.0.0",
+  "description": "A simple CLI tool to convert Shapefile (.shp) to GeoJSON format",
+  "keywords": [
+    "shapefile",
+    "geojson",
+    "converter",
+    "gis",
+    "cli"
+  ],
+  "author": "",
+  "license": "MPL-2.0",
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "type": "module",
+  "main": "./src/index.mjs",
+  "bin": {
+    "shp2geojson": "./bin/shp2geojson"
+  },
+  "scripts": {
+    "test": "node bin/shp2geojson --help"
+  },
+  "dependencies": {
+    "mapshaper": "file:.."
+  }
+}
