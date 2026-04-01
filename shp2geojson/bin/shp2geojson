@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 import { convert } from '../src/index.mjs';
+import path from 'path';
+import fs from 'fs';
 
 const args = process.argv.slice(2);
 
@@ -41,7 +43,28 @@ if (args.includes('--version') || args.includes('-v')) {
 
 const prettify = args.includes('--prettify');
 const json = args.includes('--json');
-const files = args.filter(arg => !arg.startsWith('-'));
+const rawFiles = args.filter(arg => !arg.startsWith('-'));
+
+// Expand glob patterns (Windows shell does not expand wildcards)
+function expandGlob(pattern) {
+  if (!/[*?]/.test(pattern)) return [pattern];
+  const dir = path.dirname(pattern);
+  const base = path.basename(pattern);
+  const regex = new RegExp(
+    '^' + base.replace(/[.+^${}()|[\]\\]/g, '\\$&')
+              .replace(/\*/g, '.*')
+              .replace(/\?/g, '.') + '$', 'i'
+  );
+  try {
+    const entries = fs.readdirSync(path.resolve(dir));
+    const matched = entries.filter(f => regex.test(f)).map(f => path.join(dir, f));
+    return matched.length > 0 ? matched : [pattern];
+  } catch {
+    return [pattern];
+  }
+}
+
+const files = rawFiles.flatMap(expandGlob);
 
 if (files.length === 0) {
   console.error('Error: No input file specified');
