@@ -62,6 +62,15 @@ node bin/shp2geojson input.shp --prettify
 node bin/shp2geojson input.zip --prettify
 ```
 
+### Use Custom Extension (.json)
+
+Use `.json` extension instead of the default `.geojson` extension:
+
+```bash
+node bin/shp2geojson input.shp --json
+node bin/shp2geojson input.zip --json
+```
+
 ### Help
 
 View all available options:
@@ -77,6 +86,7 @@ node bin/shp2geojson --help
 | `-h, --help` | Show help message |
 | `-v, --version` | Show version number |
 | `--prettify` | Format output JSON for readability |
+| `--json` | Use `.json` extension instead of `.geojson` |
 
 ## Examples
 
@@ -89,6 +99,9 @@ node bin/shp2geojson data/counties.zip
 
 # Convert with pretty formatting
 node bin/shp2geojson data/counties.shp --prettify
+
+# Convert with custom extension (.json)
+node bin/shp2geojson data/counties.shp --json
 
 # Batch convert all shapefiles in a directory
 node bin/shp2geojson data/*.shp

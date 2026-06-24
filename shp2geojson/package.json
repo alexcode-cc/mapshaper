@@ -24,7 +24,7 @@
     "convert": "node bin/shp2geojson",
     "test": "node bin/shp2geojson --help"
   },
-  "dependencies": {
-    "mapshaper": "file:.."
+  "devDependencies": {
+    "mapshaper": "^0.6.113"
   }
 }

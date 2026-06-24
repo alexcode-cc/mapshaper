@@ -1,0 +1,1 @@
+node bin/shp2geojson D:\G\66.S12R08\*.zip --json

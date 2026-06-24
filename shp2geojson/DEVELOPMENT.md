@@ -57,13 +57,14 @@ const args = process.argv.slice(2);
 |------|------|------|
 | `files` | `string[]` | 輸入檔案路徑陣列 |
 | `options.prettify` | `boolean` | 是否美化輸出 JSON |
+| `options.json` | `boolean` | 是否使用 .json 副檔名而非 .geojson |
 
 ```javascript
 export async function convert(files, options = {}) {
-  const { prettify = false } = options;
+  const { prettify = false, json = false } = options;
   mapshaper.enableLogging();
   for (const inputFile of files) {
-    await convertFile(inputFile, { prettify });
+    await convertFile(inputFile, { prettify, json });
   }
 }
 ```
@@ -84,7 +85,7 @@ export async function convert(files, options = {}) {
 1. 解析絕對路徑
 2. 檢查檔案是否存在
 3. 驗證副檔名為 `.shp` 或 `.zip`
-4. 產生輸出檔名（`.shp`/`.zip` → `.geojson`）
+4. 產生輸出檔名（根據 `json` 選項使用 `.json` 或 `.geojson`）
 5. 建構 mapshaper 命令
 6. 執行轉換並回傳 Promise
 
