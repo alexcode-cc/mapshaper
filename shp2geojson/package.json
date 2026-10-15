@@ -23,6 +23,9 @@
     "shp2geojson": "node bin/shp2geojson",
     "convert": "node bin/shp2geojson",
     "convert:dir": "node bin/shp2geojson --json",
+    "export:chat": "node scripts/export-conversation.mjs",
+    "audit:chat": "node scripts/clean-chat-logs.mjs",
+    "clean:chat": "node scripts/clean-chat-logs.mjs --delete",
     "test": "node bin/shp2geojson --help"
   },
   "devDependencies": {
