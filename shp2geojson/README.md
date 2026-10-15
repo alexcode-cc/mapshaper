@@ -17,6 +17,7 @@ npm install
 |--------|-------------|
 | `.shp` | Shapefile (requires `.dbf` and `.shx` in same directory) |
 | `.zip` | ZIP archive containing complete Shapefile components |
+| `<directory>` | Directory containing `.shp` or `.zip` files |
 
 ## Usage
 
@@ -36,6 +37,15 @@ Convert a ZIP file containing Shapefile components:
 ```bash
 node bin/shp2geojson data.zip
 # Output: data.geojson
+```
+
+### Convert Entire Directory
+
+Convert all Shapefiles or ZIP archives in a directory:
+
+```bash
+node bin/shp2geojson data/
+node bin/shp2geojson data/ --json
 ```
 
 ### Batch Conversion
@@ -77,6 +87,58 @@ View all available options:
 
 ```bash
 node bin/shp2geojson --help
+```
+
+## Helper Scripts (目錄批次轉換輔助指令稿)
+
+專案提供了針對目錄批次轉換的跨平台指令稿（將指定目錄下的 `*.zip` 檔案轉換為 `.json` 格式），目錄路徑為**必要參數**：
+
+### 1. Windows Batch (`convert.bat`)
+
+適用於 Windows 命令提示字元 (`cmd.exe`)：
+
+```cmd
+# 基本用法（目錄路徑為必要參數）
+convert.bat D:\G\2304.W07003
+
+# 支援傳入額外選項（如 --prettify）
+convert.bat D:\G\2304.W07003 --prettify
+```
+
+### 2. PowerShell (`convert.ps1`)
+
+適用於 PowerShell / Windows PowerShell：
+
+```powershell
+# 基本用法
+.\convert.ps1 D:\G\2304.W07003
+
+# 具名參數與額外選項
+.\convert.ps1 -TargetDir "D:\G\2304.W07003" --prettify
+```
+
+### 3. Bash (`convert.sh`)
+
+適用於 Linux / macOS / Git Bash / WSL：
+
+```bash
+# 基本用法
+./convert.sh D:/G/2304.W07003
+# 或 Git Bash / Linux 路徑
+./convert.sh /d/G/2304.W07003
+```
+
+### 4. npm scripts (`package.json`)
+
+透過 `npm run` 執行跨平台指令：
+
+```bash
+# 批次轉換目錄中的所有檔案為 .json（目錄為必要參數）
+npm run convert:dir -- D:\G\2304.W07003
+
+# 一般轉換用法（單檔、萬用字元或目錄）
+npm run convert -- data.shp
+npm run convert -- "D:\G\2304.W07003\*.zip" --json
 ```
 
 ## Options
