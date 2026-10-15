@@ -6,10 +6,18 @@
 
 ```
 shp2geojson/
+├── .agents/
+│   └── skills/
+│       └── export-chat/  # 對話記錄匯出 Agent Skill
 ├── bin/
 │   └── shp2geojson       # CLI 入口點（ES Module，支援檔案、萬用字元與目錄）
 ├── src/
 │   └── index.mjs         # 核心轉換邏輯
+├── scripts/              # 輔助指令腳本（對話匯出與快照清理）
+│   ├── export-conversation.mjs
+│   ├── export-conversation.ps1
+│   ├── clean-chat-logs.mjs
+│   └── clean-chat-logs.ps1
 ├── convert.bat           # Windows CMD 目錄批次轉換指令稿
 ├── convert.ps1           # PowerShell 目錄批次轉換指令稿
 ├── convert.sh            # Bash 目錄批次轉換指令稿

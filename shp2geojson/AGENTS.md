@@ -19,6 +19,9 @@ node bin/shp2geojson <input-files> [--prettify] [--json]
 npm run shp2geojson -- input.shp
 npm run convert -- input.shp
 npm run convert:dir -- <directory>
+npm run export:chat
+npm run audit:chat
+npm run clean:chat
 
 # Run helper scripts (batch directory conversion)
 convert.bat <directory>

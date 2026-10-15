@@ -141,6 +141,33 @@ npm run convert -- data.shp
 npm run convert -- "D:\G\2304.W07003\*.zip" --json
 ```
 
+## Antigravity 對話記錄匯出工具 (Chat Export & Audit)
+
+專案已整合 Antigravity IDE 對話記錄匯出與重複快照清理工具：
+
+```bash
+# 一鍵匯出當前或最新對話記錄至 logs/ 目錄
+npm run export:chat
+
+# 列出最近 10 筆歷史對話代碼
+npm run export:chat -- --list
+
+# 匯出指定對話代碼
+npm run export:chat -- <對話ID>
+
+# 檢查 logs/ 中是否有舊版重複快照（唯讀分析）
+npm run audit:chat
+
+# 清理舊版重複快照，僅保留最新完整版本
+npm run clean:chat
+```
+
+PowerShell 腳本亦可直接執行：
+```powershell
+.\scripts\export-conversation.ps1
+.\scripts\clean-chat-logs.ps1
+```
+
 ## Options
 
 | Option | Description |
