@@ -7,12 +7,16 @@
 ```
 shp2geojson/
 ├── bin/
-│   └── shp2geojson       # CLI 入口點（ES Module）
+│   └── shp2geojson       # CLI 入口點（ES Module，支援檔案、萬用字元與目錄）
 ├── src/
 │   └── index.mjs         # 核心轉換邏輯
-├── package.json          # 專案配置
+├── convert.bat           # Windows CMD 目錄批次轉換指令稿
+├── convert.ps1           # PowerShell 目錄批次轉換指令稿
+├── convert.sh            # Bash 目錄批次轉換指令稿
+├── package.json          # 專案配置（含 npm scripts）
 ├── package-lock.json     # 依賴鎖定檔
 ├── README.md             # 使用說明
+├── AGENTS.md             # Agent 指引文件
 └── DEVELOPMENT.md        # 本文件
 ```
 
@@ -364,6 +368,7 @@ var api = {
 ## 未來可能的改進方向
 
 - [x] 支援 ZIP 檔案輸入
+- [x] 支援目錄批次輸入（自動展開目錄內之 .zip / .shp 檔案）
 - [ ] 支援指定輸出目錄
 - [ ] 支援指定輸出檔名
 - [ ] 新增 `--silent` 靜音模式

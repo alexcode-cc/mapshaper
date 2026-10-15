@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI coding agents when working with code in this repository.
 
 ## Project Overview
 
@@ -18,6 +18,12 @@ node bin/shp2geojson <input-files> [--prettify] [--json]
 # Run via npm scripts
 npm run shp2geojson -- input.shp
 npm run convert -- input.shp
+npm run convert:dir -- <directory>
+
+# Run helper scripts (batch directory conversion)
+convert.bat <directory>
+.\convert.ps1 <directory>
+./convert.sh <directory>
 
 # Test (runs --help as a sanity check; no automated test suite)
 npm test
@@ -73,7 +79,7 @@ The actual Shapefile parsing, ZIP extraction, and GeoJSON export are all handled
 ```
 feat(cli): 新增 --prettify 選項支援格式化輸出
 fix(convert): 修正 ZIP 檔案路徑解析錯誤
-docs: 新增 CLAUDE.md 專案指引文件
+docs: 新增 AGENTS.md 專案指引文件
 chore: 更新 npm scripts 設定
 ```
 
