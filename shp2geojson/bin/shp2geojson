@@ -12,11 +12,13 @@ shp2geojson - Convert Shapefile to GeoJSON
 
 Usage:
   shp2geojson <input.shp|input.zip>
+  shp2geojson <directory>
   shp2geojson <file1> <file2> ...
 
 Supported Input Formats:
-  .shp   Shapefile (requires .dbf and .shx in same directory)
-  .zip   ZIP archive containing Shapefile components
+  .shp         Shapefile (requires .dbf and .shx in same directory)
+  .zip         ZIP archive containing Shapefile components
+  <directory>  Directory containing .shp or .zip files
 
 Options:
   -h, --help     Show this help message
@@ -27,6 +29,7 @@ Options:
 Examples:
   shp2geojson data.shp                    # Output: data.geojson
   shp2geojson data.zip                    # Output: data.geojson (from ZIP)
+  shp2geojson data/                       # Convert all shp/zip in directory
   shp2geojson *.shp                       # Convert all shp files
   shp2geojson *.zip                       # Convert all zip files
   shp2geojson data.shp --prettify         # Pretty formatted output
@@ -45,9 +48,27 @@ const prettify = args.includes('--prettify');
 const json = args.includes('--json');
 const rawFiles = args.filter(arg => !arg.startsWith('-'));
 
-// Expand glob patterns (Windows shell does not expand wildcards)
+// Expand glob patterns or directory inputs (Windows shell does not expand wildcards)
 function expandGlob(pattern) {
-  if (!/[*?]/.test(pattern)) return [pattern];
+  if (!/[*?]/.test(pattern)) {
+    try {
+      const resolved = path.resolve(pattern);
+      if (fs.existsSync(resolved) && fs.statSync(resolved).isDirectory()) {
+        const entries = fs.readdirSync(resolved);
+        const matched = entries
+          .filter(f => /\.(zip|shp)$/i.test(f))
+          .map(f => path.join(pattern, f));
+        if (matched.length === 0) {
+          console.error(`Error: No .shp or .zip files found in directory: ${pattern}`);
+          process.exit(1);
+        }
+        return matched;
+      }
+    } catch {
+      // not a directory or inaccessible, continue to default
+    }
+    return [pattern];
+  }
   const dir = path.dirname(pattern);
   const base = path.basename(pattern);
   const regex = new RegExp(
@@ -67,7 +88,7 @@ function expandGlob(pattern) {
 const files = rawFiles.flatMap(expandGlob);
 
 if (files.length === 0) {
-  console.error('Error: No input file specified');
+  console.error('Error: No input file or directory specified');
   process.exit(1);
 }
 

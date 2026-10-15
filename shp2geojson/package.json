@@ -22,6 +22,7 @@
   "scripts": {
     "shp2geojson": "node bin/shp2geojson",
     "convert": "node bin/shp2geojson",
+    "convert:dir": "node bin/shp2geojson --json",
     "test": "node bin/shp2geojson --help"
   },
   "devDependencies": {
